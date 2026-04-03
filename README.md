@@ -1,102 +1,52 @@
-# 📊 monitorFII
+# 🛰️ MonitorFII - Sentinel Intelligence
 
-![Python](https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python)
-![Streamlit](https://img.shields.io/badge/Streamlit-App-red?style=for-the-badge&logo=streamlit)
-![SQLite](https://img.shields.io/badge/SQLite-Database-lightgrey?style=for-the-badge&logo=sqlite)
-![Plotly](https://img.shields.io/badge/Plotly-Visualização-3f4f75?style=for-the-badge&logo=plotly)
-![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-150458?style=for-the-badge&logo=pandas)
+[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://streamlit.io/)
+[![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)](https://plotly.com/)
+[![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
 
----
+Sistema inteligente de monitoramento e análise de Fundos de Investimento Imobiliário (FIIs), projetado para automatizar a coleta de dados e fornecer insights de compra baseados em médias históricas de mercado.
 
-## 📌 Sobre o Projeto
+## 🚀 Funcionalidades Principais
 
-O **monitorFII** é um ecossistema de monitoramento de Fundos Imobiliários (FIIs) desenvolvido em Python.  
-O sistema realiza coleta automatizada de dados, tratamento e persistência em banco local, além de disponibilizar um dashboard interativo para análise e tomada de decisão.
+- **Automação de Coleta (RPA):** Motor de busca que percorre a carteira de ativos e persiste preços reais com data e hora.
+- **Sanitização de Dados (Clean Code):** Tratamento rigoroso de strings (`Upper/Trim`) na entrada do banco para garantir integridade referencial.
+- **Lógica de Recomendação Financeira:** Algoritmo que compara o preço atual com a média histórica para identificar oportunidades de desconto.
+- **Resiliência Visual:** Dashboard dinâmico com tratamento de erros e verificação de massa de dados mínima para plotagem de gráficos de dispersão (Scatter).
 
----
+## 🛠️ Arquitetura do Projeto
 
-## 🚀 Arquitetura do Projeto
+O ecossistema é modularizado em três pilares:
 
-O projeto é dividido em três camadas principais:
+1.  **`2_robo.py`**: Motor de scraping e persistência de dados.
+2.  **`3_dashboard.py`**: Interface de usuário (UI) focada em Data Visualization.
+3.  **`investimentos.db`**: Banco de dados relacional SQLite.
 
-- **Coleta de Dados (RPA)** → `2_robo.py`
-- **Persistência (Banco de Dados)** → SQLite
-- **Visualização (Dashboard)** → `3_dashboard.py`
+## 📋 Como Instalar e Rodar
 
----
-
-## ⚙️ Funcionalidades
-
-### 🤖 Coleta Automatizada (RPA)
-- Script `2_robo.py` responsável pela extração de dados de FIIs
-- Execução automatizada para atualização contínua da base
-- Estruturado para fácil expansão de fontes de dados
-
----
-
-### 🧹 Tratamento e Padronização de Dados
-- Sanitização aplicada diretamente no banco:
-  ```sql
-  UPPER(TRIM(campo))
-
-  Garante:
-Consistência textual
-Eliminação de espaços inválidos
-Padronização para queries confiáveis
-📈 Lógica de Recomendação
-Estratégia simples e eficiente:
-
-Recomendação de compra quando:
-Preço Atual < Média Histórica
-Permite identificar oportunidades com base em comportamento histórico
-📊 Dashboard Interativo
-Construído com Streamlit
-Visualizações com Plotly
-🔹 Resiliência implementada:
-Uso de px.scatter para evitar problemas de escala em gráficos
-Tratamento de erro para cenários com poucos dados:
-Evita quebra quando há menos de 2 registros no banco
-Garante estabilidade da aplicação
-🗄️ Banco de Dados
-Banco local utilizando SQLite
-Estrutura leve e eficiente para prototipagem e uso individual
-Ideal para projetos de automação e análise local
-🛠️ Tecnologias Utilizadas
-Python
-Streamlit
-SQLite
-Pandas
-Plotly
-⚡ Como Executar o Projeto
-🔹 1. Criar ambiente virtual
+### 1. Configurar Ambiente Virtual
+```bash
 python -m venv venv
-🔹 2. Ativar ambiente virtual
-
-Windows:
-
-venv\Scripts\activate
-
-Linux/Mac:
-
-source venv/bin/activate
-🔹 3. Instalar dependências
+# No Windows: venv\Scripts\activate
 pip install -r requirements.txt
-🔹 4. Executar o robô de coleta
-python 2_robo.py
-🔹 5. Rodar o dashboard
-streamlit run 3_dashboard.py
-📂 Estrutura do Projeto
-monitorFII/
-├── 2_robo.py          # RPA de coleta de dados
-├── 3_dashboard.py     # Dashboard interativo
-├── database.db        # Banco SQLite
-├── requirements.txt
-└── README.md
-📌 Considerações Técnicas
-Arquitetura modular facilita manutenção e expansão
-Uso de SQLite reduz complexidade de infraestrutura
-Pipeline simples e eficiente: Coleta → Tratamento → Visualização
-Preparado para evolução futura (APIs, alertas, deploy)
-👨‍💻 Autor
+2. Execução
+Para popular o banco com dados:
 
-Gabriel Santos
+Bash
+python 2_robo.py
+
+Para visualizar o terminal de decisão:
+
+Bash
+streamlit run 3_dashboard.py
+
+🧠 Decisões Técnicas de Engenharia
+Gráfico de Pontos (Scatter): Implementado para garantir melhor visualização em ativos com baixa volatilidade e evitar bugs de escala.
+
+Tratamento de Exceção: Bloqueio de renderização quando o banco possui dados insuficientes (menos de 2 registros), fornecendo diagnóstico claro ao usuário.
+
+Integridade de String: Busca SQL utilizando UPPER(TRIM(ticker)) para neutralizar erros de input ou sujeira nos dados capturados.
+
+👨‍💻 Desenvolvedor
+Gabriel Lucas
