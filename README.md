@@ -1,54 +1,145 @@
-# 🛰️ MonitorFII - Sentinel Intelligence
+# 📊 monitorFII
 
-[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://streamlit.io/)
-[![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
-[![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)](https://plotly.com/)
-[![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
-
-Sistema inteligente de monitoramento e análise de Fundos de Investimento Imobiliário (FIIs), projetado para automatizar a coleta de dados e fornecer insights de compra baseados em médias históricas de mercado.
-## 🚀 Funcionalidades Principais
-
-- **Automação de Coleta (RPA):** Motor de busca que percorre a carteira de ativos e persiste preços reais com timestamp no banco de dados.
-- **Sanitização de Dados (Clean Code):** Tratamento de strings (`Upper/Trim`) na entrada do banco para garantir integridade e evitar duplicidade de ativos.
-- **Lógica de Recomendação:** Algoritmo que compara o preço atual com a média histórica para identificar oportunidades de compra (Preço < Média).
-- **Interface Resiliente:** Dashboard dinâmico com tratamento de erros para dados insuficientes e falhas de bibliotecas.
-
-## 🛠️ Arquitetura do Projeto
-
-O ecossistema é modularizado em três pilares fundamentais:
-
-1.  **`2_robo.py`**: Responsável pelo scraping (coleta) e persistência de dados.
-2.  **`3_dashboard.py`**: Interface de usuário (UI) focada em Data Visualization.
-3.  **`investimentos.db`**: Banco de dados relacional SQLite para histórico de longo prazo.
-
-## 📋 Como Instalar e Rodar
-
-### 1. Configurar Ambiente Virtual (Recomendado)
-```bash
-python -m venv venv
-# No Windows:
-venv\Scripts\activate
-# No Linux/Mac:
-source venv/bin/activate
-
-### 2. Instalar Dependências
-
-pip install -r requirements.txt
-
-3. Execução
-Para popular o banco com dados de teste ou reais:
-
-python 2_robo.py
-
-## 🧠 Decisões Técnicas de Engenharia
-
-- **Gráfico de Pontos (Scatter):** Implementado para garantir melhor visualização em ativos com baixa variação e evitar bugs de escala de gráficos de barras convencionais.
-- **Tratamento de Exceção:** Bloqueio de renderização quando o banco possui menos de 2 registros, fornecendo um diagnóstico claro ao usuário em vez de um erro genérico.
-- **Integridade de Busca:** Consultas SQL utilizando `UPPER(TRIM(ticker))` para neutralizar erros de digitação humana ou "sujeira" nos dados capturados via automação.
+> Ecossistema de monitoramento de Fundos de Investimento Imobiliário (FIIs) com coleta automatizada via RPA, armazenamento em banco de dados local e dashboard interativo para análise e recomendação de compra.
 
 ---
 
-### 👨‍💻 Desenvolvedor
-**Gabriel Lucas**
-*Foco em Automação, Python e Engenharia de Software.*
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.x-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-3-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![Plotly](https://img.shields.io/badge/Plotly-5.x-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-2.x-150458?style=for-the-badge&logo=pandas&logoColor=white)
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+monitorFII/
+├── 2_robo.py           # RPA de coleta e persistência de dados
+├── 3_dashboard.py      # Dashboard interativo via Streamlit
+├── requirements.txt    # Dependências do projeto
+├── fii.db              # Banco de dados SQLite (gerado automaticamente)
+└── README.md
+```
+
+---
+
+## ✨ Funcionalidades
+
+### 🤖 RPA de Coleta — `2_robo.py`
+- Realiza a coleta automatizada de dados de FIIs a partir de fontes externas.
+- Persiste os registros no banco de dados SQLite local (`fii.db`).
+- Aplica sanitização de dados antes da inserção, utilizando as funções `UPPER(TRIM())` diretamente nas queries SQL, garantindo consistência e eliminando ruídos como espaços extras e variações de caixa nos campos textuais.
+
+### 📈 Dashboard Interativo — `3_dashboard.py`
+- Interface construída com **Streamlit** para visualização e análise dos FIIs monitorados.
+- Gráficos de dispersão renderizados com `px.scatter` (Plotly Express), estratégia deliberada para **evitar bugs de escala** presentes em gráficos de linha com séries temporais esparsas.
+- **Tratamento de erro robusto:** caso o banco possua menos de 2 registros para um determinado FII, o dashboard exibe uma mensagem informativa ao usuário em vez de lançar uma exceção, garantindo estabilidade da aplicação.
+
+### 💡 Lógica de Recomendação de Compra
+- O sistema avalia automaticamente cada FII monitorado com base no seguinte critério:
+
+```
+Recomendação de Compra → Preço Atual < Média Histórica de Preços
+```
+
+- FIIs que atendem ao critério são destacados no dashboard como oportunidades de aporte, auxiliando na tomada de decisão fundamentada em dados históricos.
+
+---
+
+## ⚙️ Instalação e Configuração
+
+### Pré-requisitos
+
+- Python 3.10 ou superior
+- `pip` atualizado
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/seu-usuario/monitorFII.git
+cd monitorFII
+```
+
+### 2. Crie e ative o ambiente virtual
+
+```bash
+# Criação do venv
+python -m venv venv
+
+# Ativação — Linux/macOS
+source venv/bin/activate
+
+# Ativação — Windows
+venv\Scripts\activate
+```
+
+### 3. Instale as dependências
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## ▶️ Execução
+
+### Rodar o Robô de Coleta
+
+Execute o RPA para coletar e persistir os dados mais recentes dos FIIs no banco local:
+
+```bash
+python 2_robo.py
+```
+
+> Recomenda-se agendar a execução periódica deste script (ex.: via `cron` no Linux ou Agendador de Tarefas no Windows) para manter os dados atualizados.
+
+### Iniciar o Dashboard
+
+```bash
+streamlit run 3_dashboard.py
+```
+
+O Streamlit abrirá automaticamente o dashboard no navegador padrão em `http://localhost:8501`.
+
+---
+
+## 🗄️ Banco de Dados
+
+O projeto utiliza **SQLite** como solução de persistência local, sem necessidade de infraestrutura externa. O arquivo `fii.db` é criado automaticamente na primeira execução do robô.
+
+A sanitização aplicada via `UPPER(TRIM())` nas operações de escrita assegura integridade referencial e evita duplicatas causadas por inconsistências de formatação nos dados brutos coletados.
+
+---
+
+## 📦 Dependências
+
+As principais bibliotecas utilizadas estão listadas em `requirements.txt`:
+
+| Biblioteca   | Finalidade                              |
+|--------------|-----------------------------------------|
+| `streamlit`  | Interface web do dashboard              |
+| `plotly`     | Geração de gráficos interativos         |
+| `pandas`     | Manipulação e análise de dados          |
+| `requests`   | Requisições HTTP no RPA de coleta       |
+| `sqlite3`    | Nativo do Python — persistência local   |
+
+---
+
+## 🔒 Boas Práticas Implementadas
+
+- **Sanitização de dados** na camada de persistência com `UPPER(TRIM())`.
+- **Resiliência no dashboard** com tratamento explícito de casos com volume insuficiente de dados (< 2 registros).
+- **Escolha técnica de `px.scatter`** sobre `px.line` para evitar comportamentos inesperados de escala em séries com baixa densidade de pontos.
+- **Isolamento de dependências** via `venv`, evitando conflitos com o ambiente Python do sistema.
+
+---
+
+## 👨‍💻 Desenvolvedor
+
+Desenvolvido por **Gabriel Santos**.
+
+---
+
+*monitorFII — Inteligência de dados a serviço do investidor em FIIs.*
