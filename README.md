@@ -171,36 +171,11 @@ Esses alertas são exibidos diretamente nas cards de cada FII, guiando a tomada 
 │                                                             │
 │          [ SCREENSHOT — Visão Geral do Dashboard ]         │
 │                                                             │
-│   Substitua este bloco pela imagem: docs/screenshot_01.png │
+│       ![Dashboard](./assets/dashboard_main.png)
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Simulador de Aportes
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                                                             │
-│         [ SCREENSHOT — Simulador Dinâmico de Renda ]       │
-│                                                             │
-│   Substitua este bloco pela imagem: docs/screenshot_02.png │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Painel de Alertas P/VP
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                                                             │
-│        [ SCREENSHOT — Sistema de Alertas P/VP ]            │
-│                                                             │
-│   Substitua este bloco pela imagem: docs/screenshot_03.png │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-> 💡 Para adicionar screenshots: salve as imagens em `/docs/` e substitua os blocos acima por `![Alt](docs/nome_da_imagem.png)`.
 
 ---
 
